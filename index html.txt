@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Support Center</title>
+  <meta name="description" content="A clean, responsive support website for customers to get help and contact support."/>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --text: #e7ecff;
+      --muted: #a8b3d6;
+      --brand: #00a3ff;
+      --brand-2: #6df0c2;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; font-family: system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6;
+    }
+    .container { width: min(1100px, 92%); margin-inline: auto; }
+    header { position: sticky; top: 0; background: #0b1020ee; backdrop-filter: blur(10px); border-bottom: 1px solid #ffffff14; z-index: 100; }
+    .nav { display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; }
+    .brand { font-weight: 700; font-size: 1.3rem; color: var(--brand); }
+    nav a { margin-left: 1rem; color: var(--text); font-weight: 600; opacity: .9; }
+    nav a:hover { opacity: 1; }
+    .section { padding: 4rem 0; }
+    h1, h2, h3 { margin: 0 0 .6rem; line-height: 1.2; }
+    h1 { font-size: 2.2rem; }
+    h2 { font-size: 1.6rem; }
+    .card { background: #ffffff08; border: 1px solid #ffffff14; border-radius: 16px; padding: 1.4rem; margin-bottom: 1.2rem; }
+    .btn { display:inline-block; padding:.9rem 1.2rem; border-radius:999px; border:0; background:linear-gradient(135deg, var(--brand), var(--brand-2)); color:#001018; font-weight:700; cursor:pointer; }
+    .btn:hover { filter:brightness(1.1); }
+    input, textarea { width: 100%; padding:.9rem 1rem; border-radius:12px; border:1px solid #ffffff1a; background:#0b1020; color:var(--text); margin-bottom:.8rem; }
+    textarea { min-height: 120px; }
+    footer { padding:2rem 0; text-align:center; border-top:1px solid #ffffff14; color: var(--muted); background:#0b1020; }
+
+    /* Chat Widget */
+    #chatWidgetBtn {
+      position: fixed; bottom: 20px; right: 20px; background: var(--brand);
+      color: #001018; border: none; border-radius: 50%; width: 60px; height: 60px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; cursor: pointer; box-shadow: 0 6px 20px rgba(0,0,0,.4);
+      z-index: 1000;
+    }
+    #chatBox {
+      position: fixed; bottom: 90px; right: 20px; width: 300px; max-height: 400px;
+      background: #121935; border: 1px solid #ffffff20; border-radius: 12px;
+      display: none; flex-direction: column; overflow: hidden; z-index: 1000;
+    }
+    #chatHeader {
+      background: var(--brand); color: #001018; padding: .8rem; font-weight: 700;
+    }
+    #chatMessages { flex: 1; padding: .8rem; overflow-y: auto; font-size: .9rem; }
+    .msg { margin-bottom: .6rem; }
+    .bot { color: var(--muted); }
+    .user { text-align: right; color: var(--brand-2); }
+    #chatForm { display: flex; border-top: 1px solid #ffffff20; }
+    #chatInput { flex: 1; border: none; padding: .6rem; background: #0b1020; color: var(--text); }
+    #chatSend { border: none; background: var(--brand); color: #001018; padding: 0 .9rem; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <div class="brand">Support Center</div>
+      <nav>
+        <a href="#home">Home</a>
+        <a href="#faq">FAQs</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <section id="home" class="section">
+    <div class="container">
+      <h1>Welcome to Our Support Center</h1>
+      <p>If you need help, you’re in the right place. Browse FAQs, contact us, or chat with our support bot for instant answers.</p>
+    </div>
+  </section>
+
+  <section id="faq" class="section">
+    <div class="container">
+      <h2>Frequently Asked Questions</h2>
+      <div class="card">
+        <h3>How can I reset my password?</h3>
+        <p>You can reset your password by clicking on “Forgot Password” on the login screen. Follow the instructions sent to your email.</p>
+      </div>
+      <div class="card">
+        <h3>How do I contact support?</h3>
+        <p>Use the contact form below or email us directly at <a href="mailto:support@example.com">support@example.com</a>.</p>
+      </div>
+      <div class="card">
+        <h3>Where can I track my requests?</h3>
+        <p>Once you contact us, you’ll receive a ticket number by email to track your request.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="section">
+    <div class="container">
+      <h2>Contact Support</h2>
+      <p>Fill out this form and our support team will get back to you shortly.</p>
+      <form onsubmit="sendMessage(event)">
+        <input type="text" name="name" placeholder="Your name" required>
+        <input type="email" name="email" placeholder="Your email" required>
+        <textarea name="message" placeholder="Describe your issue" required></textarea>
+        <button type="submit" class="btn">Submit Request</button>
+        <p id="formNote" class="muted">Demo form only. Connect to Formspree/Netlify to send emails.</p>
+      </form>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">© <span id="year"></span> Support Center — All rights reserved.</div>
+  </footer>
+
+  <!-- Chat Widget -->
+  <button id="chatWidgetBtn">💬</button>
+  <div id="chatBox">
+    <div id="chatHeader">Support Chat</div>
+    <div id="chatMessages">
+      <div class="msg bot">👋 Hi! I’m your support assistant. How can I help you today?</div>
+    </div>
+    <form id="chatForm">
+      <input type="text" id="chatInput" placeholder="Type a message..." required>
+      <button id="chatSend">➤</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    function sendMessage(e){
+      e.preventDefault();
+      const btn=e.target.querySelector('button');
+      btn.disabled=true; btn.textContent='Sending…';
+      setTimeout(()=>{
+        btn.textContent='Request Sent ✔';
+        alert('Your support request was recorded locally. Connect a real service to receive messages.');
+      },800);
+    }
+
+    // Chat widget logic
+    const chatBtn = document.getElementById('chatWidgetBtn');
+    const chatBox = document.getElementById('chatBox');
+    const chatForm = document.getElementById('chatForm');
+    const chatInput = document.getElementById('chatInput');
+    const chatMessages = document.getElementById('chatMessages');
+
+    chatBtn.addEventListener('click', () => {
+      chatBox.style.display = chatBox.style.display === 'flex' ? 'none' : 'flex';
+    });
+
+    chatForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const text = chatInput.value.trim();
+      if(!text) return;
+      const userMsg = document.createElement('div');
+      userMsg.className = 'msg user';
+      userMsg.textContent = text;
+      chatMessages.appendChild(userMsg);
+      chatInput.value = '';
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+
+      // Simulated bot reply
+      setTimeout(()=>{
+        const botMsg = document.createElement('div');
+        botMsg.className = 'msg bot';
+        botMsg.textContent = "Thanks for your message. Our team will respond shortly.";
+        chatMessages.appendChild(botMsg);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      },1000);
+    });
+  </script>
+</body>
+</html>
